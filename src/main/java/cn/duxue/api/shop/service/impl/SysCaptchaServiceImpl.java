@@ -6,6 +6,7 @@ import cn.duxue.api.shop.service.SysCaptchaService;
 import cn.duxue.common.enums.ExceptionCodeEnums;
 import cn.duxue.common.exception.DuXueException;
 import cn.duxue.common.utils.PageUtils;
+import cn.duxue.common.utils.ValidateCodeUtil;
 import cn.hutool.core.date.DateField;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
@@ -38,7 +39,12 @@ public class SysCaptchaServiceImpl extends ServiceImpl<SysCaptchaDao, SysCaptcha
             throw new DuXueException(ExceptionCodeEnums.UUID_IS_NOT_BLANK_ERROR);
         }
         //生成文字验证码
-        String code = producer.createText();
+//        String code = producer.createText();
+
+        //自定义验证码
+        ValidateCodeUtil validateCodeUtil = new ValidateCodeUtil(94,42,4,50);
+        String code = validateCodeUtil.getCode();
+        BufferedImage buffImg = validateCodeUtil.getBuffImg();
 
         SysCaptchaEntity sysCaptchaEntity = new SysCaptchaEntity();
         sysCaptchaEntity.setUuid(uuid);
@@ -47,7 +53,8 @@ public class SysCaptchaServiceImpl extends ServiceImpl<SysCaptchaDao, SysCaptcha
         sysCaptchaEntity.setExpireTime(DateUtil.offset(new Date(), DateField.MINUTE, 5));
         this.save(sysCaptchaEntity);
 
-        return producer.createImage(code);
+//        return producer.createImage(code);
+        return buffImg;
     }
 
     @Override
