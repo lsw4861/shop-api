@@ -8,10 +8,7 @@ import java.util.Map;
 
 /**
  * 认证Token表
- *
- * @author chenshun
- * @email sunlightcs@gmail.com
- * @date 2019-06-26 14:35:16
+ * Created by liang on 2019/1/5.
  */
 public interface SysTokenService extends IService<SysTokenEntity> {
 

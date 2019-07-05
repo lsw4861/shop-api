@@ -3,14 +3,18 @@ package cn.duxue.api.shop.service.impl;
 import cn.duxue.api.shop.dao.SysCaptchaDao;
 import cn.duxue.api.shop.entity.SysCaptchaEntity;
 import cn.duxue.api.shop.service.SysCaptchaService;
+import cn.duxue.api.shop.warpper.SysCaptchaWrapper;
 import cn.duxue.common.enums.ExceptionCodeEnums;
 import cn.duxue.common.exception.DuXueException;
+import cn.duxue.common.page.PageFactory;
 import cn.duxue.common.utils.PageUtils;
 import cn.duxue.common.utils.ValidateCodeUtil;
+import cn.hutool.core.convert.Convert;
 import cn.hutool.core.date.DateField;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.google.code.kaptcha.Producer;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,10 +31,15 @@ public class SysCaptchaServiceImpl extends ServiceImpl<SysCaptchaDao, SysCaptcha
     private Producer producer;
 
     @Override
-    public PageUtils queryPage(Map<String, Object> params) {
-        return null;
-    }
+    public PageUtils queryPage(SysCaptchaEntity sysCaptchaEntity) {
 
+        int currPage = Convert.toInt(sysCaptchaEntity.getParams().get("currPage"));
+        int pageSize = Convert.toInt(sysCaptchaEntity.getParams().get("pageSize"));
+
+        Page<Map<String, Object>> mapPage = baseMapper.selectSysCaptcha(new Page(currPage, pageSize), sysCaptchaEntity);
+        Page page = new SysCaptchaWrapper(mapPage).wrap();
+        return PageFactory.createPageInfo(page);
+    }
 
 
     @Override
