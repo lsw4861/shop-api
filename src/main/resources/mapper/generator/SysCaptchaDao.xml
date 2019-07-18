@@ -13,9 +13,8 @@
 
 
     <select id="selectSysCaptcha" resultType="map">
-
-        SELECT `id`, `uuid`, `code` ,`expire_time`  FROM  `sys_captcha`
-
+      SELECT `id`, `uuid`, `code` ,`expire_time`  FROM  `sys_captcha`
     </select>
+
 
 </mapper>
